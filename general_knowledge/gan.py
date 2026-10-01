@@ -105,6 +105,14 @@ optimizer_G = optim.Adam(generator.parameters()\
 optimizer_D = optim.Adam(discriminator.parameters()\
                          , lr=lr, betas=(beta1, beta2))
 
+"""
+Step 1: Update the Discriminator. The discriminator should output 1 for real images and fake image. Take a batch of real image and fake images. Compute the BCE for both and update only the the discriminator weight
+
+Step 2: update the Generator. Generator wants discriminator to say "real" for its fakes. 
+- Generate images, pass them through discriminator and compute BCE against the target 1 
+- Discriminator should output 0 for fake images, and only the gradient's weights get updated.
+
+"""
 # Training the GAN 
 for epoch in range(num_epochs):
     for i, batch in enumerate(dataloader):
@@ -120,7 +128,7 @@ for epoch in range(num_epochs):
 
         optimizer_D.zero_grad()
 
-       # Generator random noise veector as input for the generator
+        # Generator random noise vector as input for the generator
         z = torch.randn(real_images.size(0), latent_dim, device=device)
       
         fake_images = generator(z)
@@ -134,6 +142,7 @@ for epoch in range(num_epochs):
         d_loss.backward()
         optimizer_D.step()
 
+        # Generator step
         optimizer_G.zero_grad()
       
         gen_images = generator(z)
