@@ -66,7 +66,7 @@ def ppo(policy, value_net, iterations=150, rollout_len=128, epochs=4, num_miniba
     optim = AdamW(policy.parameters(), lr=lr)
     value_optim = AdamW(value_net.parameters(), lr=lr)
     vec_env = gym.vector.SyncVectorEnv(
-        [lambda: gym.make("Pendulum-v1") for _ in range(num_envs)]
+        [lambda: gym.make(env_id) for _ in range(num_envs)]
     )
     parallel_env = PreprocessEnv(vec_env)
 
